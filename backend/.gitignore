@@ -1,0 +1,84 @@
+# ============================================================
+# Python
+# ============================================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ============================================================
+# Environment / Secrets
+# ============================================================
+
+.env
+.env.*
+!.env.example
+
+# ============================================================
+# IDE / Editor
+# ============================================================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ============================================================
+# Git
+# ============================================================
+
+.git/
+
+# ============================================================
+# Application runtime data
+# ============================================================
+
+storage/repositories/*
+storage/test/*
+
+workspaces/*
+
+# Keep directory structure
+!storage/repositories/.gitkeep
+!storage/test/.gitkeep
+!workspaces/.gitkeep
+
+# ============================================================
+# Frontend / Node (if frontend is inside this repository)
+# ============================================================
+
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ============================================================
+# Temporary files
+# ============================================================
+
+*.log
+*.tmp
+*.temp
+
+# ZIP / generated archives
+*.zip
