@@ -43,15 +43,17 @@ export default function ArchitecturePage({
     useState<string | null>(null);
 
   const {
-    data: architecture,
-    loading,
-    error,
-    refetch,
-  } = useAsyncData<ArchitectureAnalysis | null>(
-    () => api.getArchitectureAnalysis(auditId),
-    null,
-    [auditId]
-  );
+  data: architectureResponse,
+  loading,
+  error,
+  refetch,
+} = useAsyncData<any>(
+  () => api.getArchitectureAnalysis(auditId),
+  null,
+  [auditId]
+);
+
+const architecture = architectureResponse?.architecture ?? null;
 console.log('ARCHITECTURE API RESPONSE:', architecture);
   if (loading) {
     return (
@@ -79,18 +81,6 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
     );
   }
 
-  /*
-   * Backend field names intentionally remain unchanged.
-   *
-   * Backend:
-   * technologies
-   * layers
-   * modules
-   * relationships
-   * risks
-   * files_scanned
-   * analysis_id
-   */
 
   const technologies = architecture.technologies ?? [];
   const layers = architecture.layers ?? [];
@@ -99,7 +89,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
   const risks = architecture.risks ?? [];
 
   const selectedMod = modules.find(
-    (module) => module.id === selectedModule
+    (module:any) => module.id === selectedModule
   );
 
   return (
@@ -120,7 +110,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
       />
 
       <div className="grid gap-6 lg:grid-cols-3">
-       <Card>
+<Card>
   <CardHeader>
     <CardTitle className="text-base">
       Detected Technologies
@@ -134,13 +124,13 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
       </p>
     ) : (
       <div className="flex flex-wrap gap-2">
-        {technologies.map((technology) => (
-          <Badge
-            key={technology}
-            variant="secondary"
+        {technologies.map((technology:any, index:any) => (
+          <div
+            key={`${technology}-${index}`}
+            className="rounded-md border bg-muted px-3 py-1.5 text-sm font-medium text-foreground"
           >
             {technology}
-          </Badge>
+          </div>
         ))}
       </div>
     )}
@@ -160,7 +150,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
               </p>
             ) : (
               <div className="flex flex-col items-center gap-2">
-                {layers.map((layer, index) => (
+                {layers.map((layer:any, index:any) => (
                   <div
                     key={`${layer.name}-${index}`}
                     className="flex flex-col items-center"
@@ -203,7 +193,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
           </Card>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {modules.map((module) => {
+            {modules.map((module:any) => {
               const moduleFindings =
                 module.findings ?? [];
 
@@ -250,7 +240,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
                         </span>
                       ) : (
                         moduleDependencies.map(
-                          (dependency) => (
+                          (dependency:any) => (
                             <Badge
                               key={dependency}
                               variant="secondary"
@@ -291,7 +281,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
                   </p>
                 ) : (
                   (selectedMod.files ?? []).map(
-                    (file) => (
+                    (file:any) => (
                       <div
                         key={file}
                         className="flex items-center gap-2"
@@ -321,7 +311,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
               ) : (
                 <ul className="list-inside list-disc space-y-1 text-sm">
                   {(selectedMod.responsibilities ?? []).map(
-                    (responsibility) => (
+                    (responsibility:any) => (
                       <li key={responsibility}>
                         {responsibility}
                       </li>
@@ -344,7 +334,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
                   </p>
                 ) : (
                   (selectedMod.dependencies ?? []).map(
-                    (dependency) => (
+                    (dependency:any) => (
                       <Badge
                         key={dependency}
                         variant="secondary"
@@ -366,7 +356,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
 
                 <div className="space-y-1">
                   {(selectedMod.findings ?? []).map(
-                    (findingId) => (
+                    (findingId:any) => (
                       <Link
                         key={findingId}
                         href={`/audits/${auditId}`}
@@ -400,7 +390,7 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
             </p>
           ) : (
             <ul className="space-y-2">
-              {risks.map((risk, index) => (
+              {risks.map((risk:any, index:any) => (
                 <li
                   key={`${risk}-${index}`}
                   className="flex items-start gap-2 text-sm"
@@ -414,12 +404,6 @@ console.log('ARCHITECTURE API RESPONSE:', architecture);
         </CardContent>
       </Card>
 
-      {/* Backend metadata is available but does not alter the existing UI. */}
-      {/*
-        architecture.analysis_id
-        architecture.files_scanned
-        relationships
-      */}
     </div>
   );
 }

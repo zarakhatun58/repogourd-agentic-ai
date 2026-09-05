@@ -7,9 +7,8 @@ from app.models.analysis import AnalysisRun
 from app.models.repository import Repository
 from app.models.finding import Finding
 from app.models.evidence import Evidence
-from app.models.agent_trajectory import AgentTrajectory
-
 from app.tools.security_tools import run_security_scan
+from app.models.agent_trajectory import AgentTrajectory
 
 
 class AnalysisError(Exception):

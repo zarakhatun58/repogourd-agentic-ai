@@ -4,7 +4,11 @@ export type AnalysisStatus =
   | 'running'
   | 'completed'
   | 'failed';
-
+export interface AnalysisCategoryScore {
+  category: string;
+  score: number | null;
+  max_score: number;
+}
 export interface Analysis {
   id: string;
   repository_id: string;

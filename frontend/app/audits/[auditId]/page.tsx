@@ -47,7 +47,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   code_quality: 'Code Quality',
   testing: 'Testing',
   dependencies: 'Dependencies',
-  security: 'Maintainability',
+  security: 'Security',
 };
 
 const FILTERS: FindingFilter[] = [
@@ -70,36 +70,16 @@ function filterFindings(
     (finding) => finding.severity === filter
   );
 }
-
 function calculateScore(findings: Finding[]): number {
-  if (findings.length === 0) {
-    return 100;
-  }
-
-  const weights: Record<string, number> = {
-    critical: 20,
-    high: 10,
-    medium: 5,
-    low: 2,
-  };
-
-  const deduction = findings.reduce(
-    (total, finding) =>
-      total + (weights[finding.severity] ?? 0),
-    0
-  );
-
+  if (findings.length === 0) { return 100; }
+  const weights: Record<string, number> =
+    { critical: 20, high: 10, medium: 5, low: 2, };
+  const deduction = findings.reduce((total, finding) =>
+    total + (weights[finding.severity] ?? 0), 0);
   return Math.max(0, Math.min(100, 100 - deduction));
 }
 
-function getRiskLevel(
-  score: number
-): 'critical' | 'high' | 'medium' | 'low' {
-  if (score < 40) return 'critical';
-  if (score < 60) return 'high';
-  if (score < 80) return 'medium';
-  return 'low';
-}
+function getRiskLevel( score: number ): 'critical' | 'high' | 'medium' | 'low' { if (score < 40) return 'critical'; if (score < 60) return 'high'; if (score < 80) return 'medium'; return 'low'; }
 
 function formatRepositoryName(
   repositoryId?: string
@@ -176,12 +156,8 @@ export default function AuditReportPage({
 
   const totalFindings = actualFindings.length;
 
-  const overallScore = useMemo(
-    () => calculateScore(actualFindings),
-    [actualFindings]
-  );
-
-  const riskLevel = getRiskLevel(overallScore);
+ const overallScore = useMemo( () => calculateScore(actualFindings), [actualFindings] ); 
+ const riskLevel = getRiskLevel(overallScore);
 
   const [evidenceCache, setEvidenceCache] =
     useState<Record<string, Evidence[]>>({});
@@ -484,17 +460,47 @@ export default function AuditReportPage({
     </div>
     {/* <Card>
       <CardHeader>
-        <CardTitle className="text-base">Score Breakdown</CardTitle>
+        <CardTitle className="text-base">
+          Score Breakdown
+        </CardTitle>
       </CardHeader>
+
       <CardContent className="space-y-4">
-        {analysis.categoryScores.map((cat: AuditCategoryScore) => (
-          <ScoreBar
+        {analysis.category_scores?.map((cat) => (
+          <div
             key={cat.category}
-            label={CATEGORY_LABELS[cat.category] ?? cat.category}
-            score={cat.score}
-            maxScore={cat.maxScore}
-          />
+            className="space-y-1"
+          >
+            {cat.score === null ? (
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">
+                  {CATEGORY_LABELS[cat.category] ??
+                    cat.category}
+                </span>
+
+                <span className="text-xs text-muted-foreground">
+                  Not available
+                </span>
+              </div>
+            ) : (
+              <ScoreBar
+                label={
+                  CATEGORY_LABELS[cat.category] ??
+                  cat.category
+                }
+                score={cat.score}
+                maxScore={cat.max_score}
+              />
+            )}
+          </div>
         ))}
+
+        {(!analysis.category_scores ||
+          analysis.category_scores.length === 0) && (
+            <p className="text-sm text-muted-foreground">
+              Score breakdown is not available for this analysis.
+            </p>
+          )}
       </CardContent>
     </Card> */}
     {/* Analysis details */}

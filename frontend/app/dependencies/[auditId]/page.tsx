@@ -129,15 +129,16 @@ export default function DependenciesPage({
          * Find the analysis associated with this audit.
          */
         const analyses = await api.listAnalyses();
-
+console.log('AUDIT ID:', auditId);
+console.log('ALL ANALYSES:', analyses);
         if (cancelled) {
           return;
         }
 
         const analysis = analyses.find(
-          (item: Analysis) =>
-            item.auditId === auditId
-        );
+  (item: Analysis) =>
+    item.id === auditId
+);
 
         if (!analysis) {
           throw new Error(
@@ -145,22 +146,23 @@ export default function DependenciesPage({
           );
         }
 
-        /*
-         * Fetch dependency analysis for
-         * the backend analysis ID.
-         */
         const result =
           await api.getDependencyAnalysis(
             analysis.id
           );
-
+console.log(
+  'DEPENDENCY API RESPONSE:',
+  result
+);
         if (cancelled) {
           return;
         }
 
-        setDependencies(
-          normalizeDependencyAnalysis(result)
-        );
+       setDependencies(
+  normalizeDependencyAnalysis(
+    result?.dependencies
+  )
+);
       } catch (err) {
         if (cancelled) {
           return;

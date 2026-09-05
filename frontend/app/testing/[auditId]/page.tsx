@@ -40,15 +40,23 @@ export default function TestingPage({
   const { auditId } = params;
 
   const {
-    data: testing,
-    loading,
-    error,
-    refetch,
-  } = useAsyncData<TestingAnalysis | null>(
-    () => api.getTestingAnalysis(auditId),
-    null,
-    [auditId]
-  );
+  data: testing,
+  loading,
+  error,
+  refetch,
+} = useAsyncData<TestingAnalysis | null>(
+  () =>
+    api.getTestingAnalysis(auditId).then((result) => {
+      console.log(
+        'TESTING API RESPONSE:',
+        result
+      );
+
+      return result;
+    }),
+  null,
+  [auditId]
+);
 
   if (loading) {
     return (
@@ -215,12 +223,15 @@ export default function TestingPage({
                   Coverage
                 </span>
 
+               
                 <Badge
-                  variant="outline"
-                  className="text-xs capitalize"
-                >
-                  {coverageSource}
-                </Badge>
+  variant="outline"
+  className="text-xs capitalize"
+>
+  {coverageSource === 'not_available'
+    ? 'Not available'
+    : coverageSource}
+</Badge>
               </div>
 
               <ScoreBar score={coverage} />
