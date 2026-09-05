@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { api, DEMO_MODE } from '@/src/lib/api';
+
 import type { HealthStatus } from '@/src/types';
+import { api, DEMO_MODE } from '@/src/lib/api';
 
 export function useHealth() {
   const [health, setHealth] = useState<HealthStatus>({
@@ -11,7 +12,7 @@ export function useHealth() {
   });
 
   const [loading, setLoading] = useState(true);
-
+      
   const check = useCallback(async () => {
     setLoading(true);
 

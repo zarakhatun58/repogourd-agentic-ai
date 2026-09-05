@@ -80,14 +80,26 @@ function normalizeDependencyPackage(
 function normalizeDependencyAnalysis(
   data: DependencyAnalysis | null | undefined
 ): DependencyAnalysis {
+  if (!data) {
+    return {
+      total: 0,
+      direct: 0,
+      dev: 0,
+      optional: 0,
+      outdated: 0,
+      conflicts: 0,
+      packages: [],
+    };
+  }
+
   return {
-    total: data?.total ?? 0,
-    direct: data?.direct ?? 0,
-    dev: data?.dev ?? 0,
-    optional: data?.optional ?? 0,
-    outdated: data?.outdated ?? 0,
-    conflicts: data?.conflicts ?? 0,
-    packages: Array.isArray(data?.packages)
+    total: data.total ?? 0,
+    direct: data.direct ?? 0,
+    dev: data.dev ?? 0,
+    optional: data.optional ?? 0,
+    outdated: data.outdated ?? 0,
+    conflicts: data.conflicts ?? 0,
+    packages: Array.isArray(data.packages)
       ? data.packages.map(normalizeDependencyPackage)
       : [],
   };
@@ -129,16 +141,16 @@ export default function DependenciesPage({
          * Find the analysis associated with this audit.
          */
         const analyses = await api.listAnalyses();
-console.log('AUDIT ID:', auditId);
-console.log('ALL ANALYSES:', analyses);
+        console.log('AUDIT ID:', auditId);
+        console.log('ALL ANALYSES:', analyses);
         if (cancelled) {
           return;
         }
 
         const analysis = analyses.find(
-  (item: Analysis) =>
-    item.id === auditId
-);
+          (item: Analysis) =>
+            item.id === auditId
+        );
 
         if (!analysis) {
           throw new Error(
@@ -150,19 +162,17 @@ console.log('ALL ANALYSES:', analyses);
           await api.getDependencyAnalysis(
             analysis.id
           );
-console.log(
-  'DEPENDENCY API RESPONSE:',
-  result
-);
+        console.log(
+          'DEPENDENCY API RESPONSE:',
+          result
+        );
         if (cancelled) {
           return;
         }
 
-       setDependencies(
-  normalizeDependencyAnalysis(
-    result?.dependencies
-  )
-);
+        setDependencies(
+          normalizeDependencyAnalysis(result)
+        );
       } catch (err) {
         if (cancelled) {
           return;
@@ -367,10 +377,9 @@ console.log(
             <Card key={stat.label}>
               <CardContent className="p-5">
                 <Icon
-                  className={`h-5 w-5 ${
-                    stat.color ??
+                  className={`h-5 w-5 ${stat.color ??
                     'text-muted-foreground'
-                  }`}
+                    }`}
                 />
 
                 <p className="mt-3 text-2xl font-bold tabular-nums">
@@ -501,26 +510,24 @@ console.log(
 
                     <TableCell>
                       <span
-                        className={`inline-flex items-center gap-1.5 text-xs capitalize ${
-                          pkg.status === 'ok'
+                        className={`inline-flex items-center gap-1.5 text-xs capitalize ${pkg.status === 'ok'
                             ? 'text-success'
                             : pkg.status === 'conflict'
                               ? 'text-destructive'
                               : pkg.status === 'outdated'
                                 ? 'text-warning'
                                 : 'text-muted-foreground'
-                        }`}
+                          }`}
                       >
                         <span
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            pkg.status === 'ok'
+                          className={`h-1.5 w-1.5 rounded-full ${pkg.status === 'ok'
                               ? 'bg-success'
                               : pkg.status === 'conflict'
                                 ? 'bg-destructive'
                                 : pkg.status === 'outdated'
                                   ? 'bg-warning'
                                   : 'bg-muted-foreground'
-                          }`}
+                            }`}
                         />
 
                         {pkg.status}
@@ -530,10 +537,9 @@ console.log(
                     <TableCell>
                       <Badge
                         variant="outline"
-                        className={`text-xs capitalize ${
-                          RISK_STYLES[pkg.risk] ??
+                        className={`text-xs capitalize ${RISK_STYLES[pkg.risk] ??
                           ''
-                        }`}
+                          }`}
                       >
                         {pkg.risk}
                       </Badge>
