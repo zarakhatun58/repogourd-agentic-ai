@@ -54,7 +54,7 @@ type RecordItem = {
 
 const DEFAULT_SCRAPE_URLS =
   process.env.NEXT_PUBLIC_SCRAPE_TARGET_URL ||
-  "http://127.0.0.1:8100";
+  "https://repoguard-scrape-target.onrender.com";
 
 export default function ScrapingPage() {
   const [job, setJob] = useState<Job | null>(null);
