@@ -16,10 +16,9 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Chromium and the system dependencies required by Playwright.
 RUN playwright install --with-deps chromium
 
-COPY app ./app
+COPY . .
 
 EXPOSE 8000
 
