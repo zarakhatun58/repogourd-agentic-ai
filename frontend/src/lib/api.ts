@@ -23,7 +23,7 @@ import {
 } from '@/src/types/evaluation';
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'https://repogourd-agentic-ai.onrender.com';
+  process.env.NEXT_PUBLIC_API_URL || 'https://repogourd-agent-ai-backend.onrender.com';
 
 export const DEMO_MODE =
   process.env.NEXT_PUBLIC_DEMO_MODE !== 'false';
