@@ -13,3 +13,6 @@ __all__ = [
     "AuditEvent",
     "AgentTrajectory",
 ]
+from app.models.scraping import ScrapeJob, ScrapeRecord
+
+__all__ += ["ScrapeJob", "ScrapeRecord"]

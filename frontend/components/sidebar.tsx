@@ -12,6 +12,7 @@ import {
   Settings,
   ShieldCheck,
   CircleDot,
+  Globe
 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { useHealth } from '@/src/hooks/use-health';
@@ -22,6 +23,7 @@ const NAV_ITEMS = [
   { href: '/new-audit', label: 'New Audit', icon: FileSearch },
   { href: '/audits', label: 'Audits', icon: ClipboardList },
   { href: '/repositories', label: 'Repositories', icon: GitBranch },
+  { href: '/scraping', label: 'Scraper', icon: Globe },
   { href: '/evaluation', label: 'Evaluation', icon: BarChart3 },
   { href: '/trajectories', label: 'Agent Traces', icon: Route },
   { href: '/settings', label: 'Settings', icon: Settings },
@@ -105,3 +107,5 @@ export function Sidebar() {
     </aside>
   );
 }
+
+// Web Automation page: /scraping (added by the RepoGuard scraping extension)

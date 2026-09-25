@@ -58,6 +58,47 @@ async function request<T>(
 export const api = {
   baseUrl: API_URL,
 
+
+  async createScrapeJob(body: {
+    name: string;
+    urls: string[];
+    selector_map: Record<string, string>;
+    max_concurrency: number;
+    delay_ms: number;
+    timeout_ms: number;
+  }) {
+    return request<{
+      id: string;
+      name: string;
+      status: string;
+      target_count: number;
+      max_concurrency: number;
+      proxy_configured: boolean;
+      processed_count: number;
+      success_count: number;
+      failed_count: number;
+      records_per_second: number;
+      started_at: string | null;
+      completed_at: string | null;
+      error_message: string | null;
+    }>('/scraping/jobs', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async getScrapeJob(id: string) {
+    return request<any>(`/scraping/jobs/${id}`);
+  },
+
+  async getScrapeRecords(id: string) {
+    return request<any[]>(`/scraping/jobs/${id}/records`);
+  },
+
+  async getScrapeEvents(id: string) {
+    return request<{ job_id: string; events: any[] }>(`/scraping/jobs/${id}/events`);
+  },
+
   async getHealth(): Promise<HealthStatus> {
     try {
       const data = await request<{
